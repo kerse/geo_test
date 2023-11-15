@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gl/flutter_gl.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Вращающийся глобус',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      title: '3D Globe Model',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Отображение 3D модели глобуса'),
+        ),
+        body: GlobeModelWidget(),
       ),
-      home: GlobeScreen(),
     );
   }
 }
 
-class GlobeScreen extends StatefulWidget {
+class GlobeModelWidget extends StatefulWidget {
   @override
-  _GlobeScreenState createState() => _GlobeScreenState();
+  _GlobeModelWidgetState createState() => _GlobeModelWidgetState();
 }
 
-class _GlobeScreenState extends State<GlobeScreen> {
-  // Тут будет логика вращения глобуса
+class _GlobeModelWidgetState extends State<GlobeModelWidget> {
+  GLController glController;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Вращающийся глобус'),
-      ),
-      body: Center(
-        // Тут будет виджет глобуса
-        child: Text('Здесь будет глобус'),
-      ),
+    return GLScene(
+      onSceneCreated: (controller) {
+        glController = controller;
+
+        // Загрузка 3D модели
+        glController.loadModel('assets/globe.obj');
+      },
+      onRender: () {
+        // Здесь вы можете выполнять дополнительные операции рендеринга, если нужно
+      },
     );
   }
 }
